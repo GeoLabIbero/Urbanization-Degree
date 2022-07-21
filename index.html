@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title><img src="https://www.territorioybienestar.mx/wp-content/uploads/2021/02/image-e1613519476373.png" /></img><img src="https://www.territorioybienestar.mx/wp-content/uploads/2021/02/Logo-territorio-y-bienestar2-e1613488386231.jpg" /></img></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/CategoriaVeryLowDensityRural_1.js"></script>
+        <script src="data/CategoriaLowDensityRural_2.js"></script>
+        <script src="data/CategoriaRuralCluster_3.js"></script>
+        <script src="data/CategoriaSuburbanorPeriurban_4.js"></script>
+        <script src="data/CategoriaSemiDenseUrbanCluster_5.js"></script>
+        <script src="data/CategoriaUrbanCluster_6.js"></script>
+        <script src="data/CategoriaUrbanCentre_7.js"></script>
+        <script src="data/Limiteestatal_8.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:20, minZoom:5
+        }).fitBounds([[14.638376080890088,-113.36161433409681],[32.08099764455041,-88.854182527042]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_Voyager_0');
+        map.getPane('pane_Voyager_0').style.zIndex = 400;
+        var layer_Voyager_0 = L.tileLayer('https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
+            pane: 'pane_Voyager_0',
+            opacity: 1.0,
+            attribution: '<a href="https://cartodb.com/basemaps/">Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</a>',
+            minZoom: 5,
+            maxZoom: 20,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_Voyager_0;
+        map.addLayer(layer_Voyager_0);
+        function pop_CategoriaVeryLowDensityRural_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Clave Geográfica</th>\
+                        <td>' + (feature.properties['CVEGEO'] !== null ? autolinker.link(feature.properties['CVEGEO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Población x AGEB</th>\
+                        <td>' + (feature.properties['POBTOT'] !== null ? autolinker.link(feature.properties['POBTOT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área</th>\
+                        <td>' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área Urbana</th>\
+                        <td>' + (feature.properties['AreaUrbana'] !== null ? autolinker.link(feature.properties['AreaUrbana'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porcentaje de área urbana</th>\
+                        <td>' + (feature.properties['Porcentaje'] !== null ? autolinker.link(feature.properties['Porcentaje'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L1</th>\
+                        <td>' + (feature.properties['DEGURBA_L1'] !== null ? autolinker.link(feature.properties['DEGURBA_L1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L2</th>\
+                        <td>' + (feature.properties['DEGURBA_L2'] !== null ? autolinker.link(feature.properties['DEGURBA_L2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Categoria de Urbanización</th>\
+                        <td>' + (feature.properties['Categoria'] !== null ? autolinker.link(feature.properties['Categoria'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CategoriaVeryLowDensityRural_1_0(feature) {
+            switch(String(feature.properties['DEGURBA_L2'])) {
+                case '11':
+                    return {
+                pane: 'pane_CategoriaVeryLowDensityRural_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(205,223,121,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_CategoriaVeryLowDensityRural_1');
+        map.getPane('pane_CategoriaVeryLowDensityRural_1').style.zIndex = 401;
+        map.getPane('pane_CategoriaVeryLowDensityRural_1').style['mix-blend-mode'] = 'normal';
+        var layer_CategoriaVeryLowDensityRural_1 = new L.geoJson(json_CategoriaVeryLowDensityRural_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CategoriaVeryLowDensityRural_1',
+            layerName: 'layer_CategoriaVeryLowDensityRural_1',
+            pane: 'pane_CategoriaVeryLowDensityRural_1',
+            onEachFeature: pop_CategoriaVeryLowDensityRural_1,
+            style: style_CategoriaVeryLowDensityRural_1_0,
+        });
+        bounds_group.addLayer(layer_CategoriaVeryLowDensityRural_1);
+        map.addLayer(layer_CategoriaVeryLowDensityRural_1);
+        function pop_CategoriaLowDensityRural_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Clave Geográfica</th>\
+                        <td>' + (feature.properties['CVEGEO'] !== null ? autolinker.link(feature.properties['CVEGEO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Población x AGEB</th>\
+                        <td>' + (feature.properties['POBTOT'] !== null ? autolinker.link(feature.properties['POBTOT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área</th>\
+                        <td>' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área Urbana</th>\
+                        <td>' + (feature.properties['AreaUrbana'] !== null ? autolinker.link(feature.properties['AreaUrbana'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porcentaje de área urbana</th>\
+                        <td>' + (feature.properties['Porcentaje'] !== null ? autolinker.link(feature.properties['Porcentaje'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L1</th>\
+                        <td>' + (feature.properties['DEGURBA_L1'] !== null ? autolinker.link(feature.properties['DEGURBA_L1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L2</th>\
+                        <td>' + (feature.properties['DEGURBA_L2'] !== null ? autolinker.link(feature.properties['DEGURBA_L2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Categoria de Urbanización</th>\
+                        <td>' + (feature.properties['Categoria'] !== null ? autolinker.link(feature.properties['Categoria'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CategoriaLowDensityRural_2_0(feature) {
+            switch(String(feature.properties['DEGURBA_L2'])) {
+                case '12':
+                    return {
+                pane: 'pane_CategoriaLowDensityRural_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(171,206,101,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_CategoriaLowDensityRural_2');
+        map.getPane('pane_CategoriaLowDensityRural_2').style.zIndex = 402;
+        map.getPane('pane_CategoriaLowDensityRural_2').style['mix-blend-mode'] = 'normal';
+        var layer_CategoriaLowDensityRural_2 = new L.geoJson(json_CategoriaLowDensityRural_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CategoriaLowDensityRural_2',
+            layerName: 'layer_CategoriaLowDensityRural_2',
+            pane: 'pane_CategoriaLowDensityRural_2',
+            onEachFeature: pop_CategoriaLowDensityRural_2,
+            style: style_CategoriaLowDensityRural_2_0,
+        });
+        bounds_group.addLayer(layer_CategoriaLowDensityRural_2);
+        map.addLayer(layer_CategoriaLowDensityRural_2);
+        function pop_CategoriaRuralCluster_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Clave Geográfica</th>\
+                        <td>' + (feature.properties['CVEGEO'] !== null ? autolinker.link(feature.properties['CVEGEO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Población x AGEB</th>\
+                        <td>' + (feature.properties['POBTOT'] !== null ? autolinker.link(feature.properties['POBTOT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área</th>\
+                        <td>' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área Urbana</th>\
+                        <td>' + (feature.properties['AreaUrbana'] !== null ? autolinker.link(feature.properties['AreaUrbana'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porcentaje de área urbana</th>\
+                        <td>' + (feature.properties['Porcentaje'] !== null ? autolinker.link(feature.properties['Porcentaje'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L1</th>\
+                        <td>' + (feature.properties['DEGURBA_L1'] !== null ? autolinker.link(feature.properties['DEGURBA_L1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L2</th>\
+                        <td>' + (feature.properties['DEGURBA_L2'] !== null ? autolinker.link(feature.properties['DEGURBA_L2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Categoria de Urbanización</th>\
+                        <td>' + (feature.properties['Categoria'] !== null ? autolinker.link(feature.properties['Categoria'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CategoriaRuralCluster_3_0(feature) {
+            switch(String(feature.properties['DEGURBA_L2'])) {
+                case '13':
+                    return {
+                pane: 'pane_CategoriaRuralCluster_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(55,86,41,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_CategoriaRuralCluster_3');
+        map.getPane('pane_CategoriaRuralCluster_3').style.zIndex = 403;
+        map.getPane('pane_CategoriaRuralCluster_3').style['mix-blend-mode'] = 'normal';
+        var layer_CategoriaRuralCluster_3 = new L.geoJson(json_CategoriaRuralCluster_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CategoriaRuralCluster_3',
+            layerName: 'layer_CategoriaRuralCluster_3',
+            pane: 'pane_CategoriaRuralCluster_3',
+            onEachFeature: pop_CategoriaRuralCluster_3,
+            style: style_CategoriaRuralCluster_3_0,
+        });
+        bounds_group.addLayer(layer_CategoriaRuralCluster_3);
+        map.addLayer(layer_CategoriaRuralCluster_3);
+        function pop_CategoriaSuburbanorPeriurban_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Clave Geográfica</th>\
+                        <td>' + (feature.properties['CVEGEO'] !== null ? autolinker.link(feature.properties['CVEGEO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Población x AGEB</th>\
+                        <td>' + (feature.properties['POBTOT'] !== null ? autolinker.link(feature.properties['POBTOT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área</th>\
+                        <td>' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área Urbana</th>\
+                        <td>' + (feature.properties['AreaUrbana'] !== null ? autolinker.link(feature.properties['AreaUrbana'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porcentaje de área urbana</th>\
+                        <td>' + (feature.properties['Porcentaje'] !== null ? autolinker.link(feature.properties['Porcentaje'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L1</th>\
+                        <td>' + (feature.properties['DEGURBA_L1'] !== null ? autolinker.link(feature.properties['DEGURBA_L1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L2</th>\
+                        <td>' + (feature.properties['DEGURBA_L2'] !== null ? autolinker.link(feature.properties['DEGURBA_L2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Categoria de Urbanización</th>\
+                        <td>' + (feature.properties['Categoria'] !== null ? autolinker.link(feature.properties['Categoria'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CategoriaSuburbanorPeriurban_4_0(feature) {
+            switch(String(feature.properties['DEGURBA_L2'])) {
+                case '21':
+                    return {
+                pane: 'pane_CategoriaSuburbanorPeriurban_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(243,236,25,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_CategoriaSuburbanorPeriurban_4');
+        map.getPane('pane_CategoriaSuburbanorPeriurban_4').style.zIndex = 404;
+        map.getPane('pane_CategoriaSuburbanorPeriurban_4').style['mix-blend-mode'] = 'normal';
+        var layer_CategoriaSuburbanorPeriurban_4 = new L.geoJson(json_CategoriaSuburbanorPeriurban_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CategoriaSuburbanorPeriurban_4',
+            layerName: 'layer_CategoriaSuburbanorPeriurban_4',
+            pane: 'pane_CategoriaSuburbanorPeriurban_4',
+            onEachFeature: pop_CategoriaSuburbanorPeriurban_4,
+            style: style_CategoriaSuburbanorPeriurban_4_0,
+        });
+        bounds_group.addLayer(layer_CategoriaSuburbanorPeriurban_4);
+        map.addLayer(layer_CategoriaSuburbanorPeriurban_4);
+        function pop_CategoriaSemiDenseUrbanCluster_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Clave Geográfica</th>\
+                        <td>' + (feature.properties['CVEGEO'] !== null ? autolinker.link(feature.properties['CVEGEO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Población x AGEB</th>\
+                        <td>' + (feature.properties['POBTOT'] !== null ? autolinker.link(feature.properties['POBTOT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área</th>\
+                        <td>' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área Urbana</th>\
+                        <td>' + (feature.properties['AreaUrbana'] !== null ? autolinker.link(feature.properties['AreaUrbana'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porcentaje de área urbana</th>\
+                        <td>' + (feature.properties['Porcentaje'] !== null ? autolinker.link(feature.properties['Porcentaje'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L1</th>\
+                        <td>' + (feature.properties['DEGURBA_L1'] !== null ? autolinker.link(feature.properties['DEGURBA_L1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L2</th>\
+                        <td>' + (feature.properties['DEGURBA_L2'] !== null ? autolinker.link(feature.properties['DEGURBA_L2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Categoria de Urbanización</th>\
+                        <td>' + (feature.properties['Categoria'] !== null ? autolinker.link(feature.properties['Categoria'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CategoriaSemiDenseUrbanCluster_5_0(feature) {
+            switch(String(feature.properties['DEGURBA_L2'])) {
+                case '22':
+                    return {
+                pane: 'pane_CategoriaSemiDenseUrbanCluster_5',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(167,113,41,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_CategoriaSemiDenseUrbanCluster_5');
+        map.getPane('pane_CategoriaSemiDenseUrbanCluster_5').style.zIndex = 405;
+        map.getPane('pane_CategoriaSemiDenseUrbanCluster_5').style['mix-blend-mode'] = 'normal';
+        var layer_CategoriaSemiDenseUrbanCluster_5 = new L.geoJson(json_CategoriaSemiDenseUrbanCluster_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CategoriaSemiDenseUrbanCluster_5',
+            layerName: 'layer_CategoriaSemiDenseUrbanCluster_5',
+            pane: 'pane_CategoriaSemiDenseUrbanCluster_5',
+            onEachFeature: pop_CategoriaSemiDenseUrbanCluster_5,
+            style: style_CategoriaSemiDenseUrbanCluster_5_0,
+        });
+        bounds_group.addLayer(layer_CategoriaSemiDenseUrbanCluster_5);
+        map.addLayer(layer_CategoriaSemiDenseUrbanCluster_5);
+        function pop_CategoriaUrbanCluster_6(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Clave Geográfica</th>\
+                        <td>' + (feature.properties['CVEGEO'] !== null ? autolinker.link(feature.properties['CVEGEO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Población x AGEB</th>\
+                        <td>' + (feature.properties['POBTOT'] !== null ? autolinker.link(feature.properties['POBTOT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área</th>\
+                        <td>' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área Urbana</th>\
+                        <td>' + (feature.properties['AreaUrbana'] !== null ? autolinker.link(feature.properties['AreaUrbana'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porcentaje de área urbana</th>\
+                        <td>' + (feature.properties['Porcentaje'] !== null ? autolinker.link(feature.properties['Porcentaje'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L1</th>\
+                        <td>' + (feature.properties['DEGURBA_L1'] !== null ? autolinker.link(feature.properties['DEGURBA_L1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L2</th>\
+                        <td>' + (feature.properties['DEGURBA_L2'] !== null ? autolinker.link(feature.properties['DEGURBA_L2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Categoria de Urbanización</th>\
+                        <td>' + (feature.properties['Categoria'] !== null ? autolinker.link(feature.properties['Categoria'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CategoriaUrbanCluster_6_0(feature) {
+            switch(String(feature.properties['DEGURBA_L2'])) {
+                case '23':
+                    return {
+                pane: 'pane_CategoriaUrbanCluster_6',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(115,41,19,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_CategoriaUrbanCluster_6');
+        map.getPane('pane_CategoriaUrbanCluster_6').style.zIndex = 406;
+        map.getPane('pane_CategoriaUrbanCluster_6').style['mix-blend-mode'] = 'normal';
+        var layer_CategoriaUrbanCluster_6 = new L.geoJson(json_CategoriaUrbanCluster_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CategoriaUrbanCluster_6',
+            layerName: 'layer_CategoriaUrbanCluster_6',
+            pane: 'pane_CategoriaUrbanCluster_6',
+            onEachFeature: pop_CategoriaUrbanCluster_6,
+            style: style_CategoriaUrbanCluster_6_0,
+        });
+        bounds_group.addLayer(layer_CategoriaUrbanCluster_6);
+        map.addLayer(layer_CategoriaUrbanCluster_6);
+        function pop_CategoriaUrbanCentre_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Clave Geográfica</th>\
+                        <td>' + (feature.properties['CVEGEO'] !== null ? autolinker.link(feature.properties['CVEGEO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Población x AGEB</th>\
+                        <td>' + (feature.properties['POBTOT'] !== null ? autolinker.link(feature.properties['POBTOT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área</th>\
+                        <td>' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Área Urbana</th>\
+                        <td>' + (feature.properties['AreaUrbana'] !== null ? autolinker.link(feature.properties['AreaUrbana'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Porcentaje de área urbana</th>\
+                        <td>' + (feature.properties['Porcentaje'] !== null ? autolinker.link(feature.properties['Porcentaje'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L1</th>\
+                        <td>' + (feature.properties['DEGURBA_L1'] !== null ? autolinker.link(feature.properties['DEGURBA_L1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Grado de Urbanización L2</th>\
+                        <td>' + (feature.properties['DEGURBA_L2'] !== null ? autolinker.link(feature.properties['DEGURBA_L2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Categoria de Urbanización</th>\
+                        <td>' + (feature.properties['Categoria'] !== null ? autolinker.link(feature.properties['Categoria'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CategoriaUrbanCentre_7_0(feature) {
+            switch(String(feature.properties['DEGURBA_L2'])) {
+                case '30':
+                    return {
+                pane: 'pane_CategoriaUrbanCentre_7',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(238,31,37,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_CategoriaUrbanCentre_7');
+        map.getPane('pane_CategoriaUrbanCentre_7').style.zIndex = 407;
+        map.getPane('pane_CategoriaUrbanCentre_7').style['mix-blend-mode'] = 'normal';
+        var layer_CategoriaUrbanCentre_7 = new L.geoJson(json_CategoriaUrbanCentre_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CategoriaUrbanCentre_7',
+            layerName: 'layer_CategoriaUrbanCentre_7',
+            pane: 'pane_CategoriaUrbanCentre_7',
+            onEachFeature: pop_CategoriaUrbanCentre_7,
+            style: style_CategoriaUrbanCentre_7_0,
+        });
+        bounds_group.addLayer(layer_CategoriaUrbanCentre_7);
+        map.addLayer(layer_CategoriaUrbanCentre_7);
+        function pop_Limiteestatal_8(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CVEGEO'] !== null ? autolinker.link(feature.properties['CVEGEO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NOMGEO'] !== null ? autolinker.link(feature.properties['NOMGEO'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['POB1'] !== null ? autolinker.link(feature.properties['POB1'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Limiteestatal_8_0() {
+            return {
+                pane: 'pane_Limiteestatal_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 0,
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Limiteestatal_8');
+        map.getPane('pane_Limiteestatal_8').style.zIndex = 408;
+        map.getPane('pane_Limiteestatal_8').style['mix-blend-mode'] = 'normal';
+        var layer_Limiteestatal_8 = new L.geoJson(json_Limiteestatal_8, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Limiteestatal_8',
+            layerName: 'layer_Limiteestatal_8',
+            pane: 'pane_Limiteestatal_8',
+            onEachFeature: pop_Limiteestatal_8,
+            style: style_Limiteestatal_8_0,
+        });
+        bounds_group.addLayer(layer_Limiteestatal_8);
+        map.addLayer(layer_Limiteestatal_8);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2><img src="https://www.territorioybienestar.mx/wp-content/uploads/2021/02/image-e1613519476373.png" /></img><img src="https://www.territorioybienestar.mx/wp-content/uploads/2021/02/Logo-territorio-y-bienestar2-e1613488386231.jpg" /></img></h2>';
+            };
+            title.addTo(map);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/Limiteestatal_8.png" /> Limite estatal': layer_Limiteestatal_8,'Categoria Urban Centre<br /><table><tr><td style="text-align: center;"><img src="legend/CategoriaUrbanCentre_7_Urbancentre0.png" /></td><td>Urban centre</td></tr></table>': layer_CategoriaUrbanCentre_7,'Categoria Urban Cluster<br /><table><tr><td style="text-align: center;"><img src="legend/CategoriaUrbanCluster_6_Urbancluster0.png" /></td><td>Urban cluster</td></tr></table>': layer_CategoriaUrbanCluster_6,'Categoria Semi Dense Urban Cluster<br /><table><tr><td style="text-align: center;"><img src="legend/CategoriaSemiDenseUrbanCluster_5_Semidenseurbancluster0.png" /></td><td>Semi dense urban cluster</td></tr></table>': layer_CategoriaSemiDenseUrbanCluster_5,'Categoria Suburban or Peri-urban<br /><table><tr><td style="text-align: center;"><img src="legend/CategoriaSuburbanorPeriurban_4_Suburbanorperiurban0.png" /></td><td>Suburban or peri-urban </td></tr></table>': layer_CategoriaSuburbanorPeriurban_4,'Categoria Rural Cluster<br /><table><tr><td style="text-align: center;"><img src="legend/CategoriaRuralCluster_3_Ruralcluster0.png" /></td><td>Rural cluster</td></tr></table>': layer_CategoriaRuralCluster_3,'Categoria Low Density Rural<br /><table><tr><td style="text-align: center;"><img src="legend/CategoriaLowDensityRural_2_Lowdensityrural0.png" /></td><td>Low density rural</td></tr></table>': layer_CategoriaLowDensityRural_2,'Categoria Very Low Density Rural<br /><table><tr><td style="text-align: center;"><img src="legend/CategoriaVeryLowDensityRural_1_Verylowdensityrural0.png" /></td><td>Very low density rural</td></tr></table>': layer_CategoriaVeryLowDensityRural_1,"Voyager": layer_Voyager_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
